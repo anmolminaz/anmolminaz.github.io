@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-lora), Georgia, "Times New Roman", serif;
+}
+
+@layer base {
+  body {
+    @apply text-slate-900 bg-white;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-lora), Georgia, serif;
+  }
+
+  /* All text links inside content areas are visually distinct */
+  article a,
+  .content-link {
+    @apply text-teal-700 underline underline-offset-2 decoration-teal-300 hover:decoration-teal-700 transition-all;
+  }
+}
+
+@layer components {
+  /* Serif font for publication titles */
+  .pub-title {
+    font-family: var(--font-lora), Georgia, serif;
+  }
+
+  /* Shared button styles */
+  .btn-primary {
+    @apply rounded-full bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 transition;
+  }
+  .btn-secondary {
+    @apply rounded-full border border-slate-900 px-5 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition;
+  }
+
+  /* Academic prose — used in detail pages */
+  .prose-academic {
+    @apply text-slate-700 leading-relaxed;
+  }
+  .prose-academic h1 {
+    @apply text-2xl font-semibold text-slate-900 mt-10 mb-4;
+    font-family: var(--font-lora), Georgia, serif;
+  }
+  .prose-academic h2 {
+    @apply text-xl font-semibold text-slate-900 mt-8 mb-3;
+    font-family: var(--font-lora), Georgia, serif;
+  }
+  .prose-academic h3 {
+    @apply text-base font-semibold text-slate-900 mt-6 mb-2;
+    font-family: var(--font-lora), Georgia, serif;
+  }
+  .prose-academic p {
+    @apply mb-4 text-sm leading-7 text-slate-700;
+  }
+  .prose-academic ul {
+    @apply mb-4 space-y-1;
+  }
+  .prose-academic li {
+    @apply text-sm leading-7 text-slate-700 ml-4 list-disc;
+  }
+  .prose-academic a {
+    @apply text-teal-700 underline underline-offset-2 decoration-teal-300 hover:decoration-teal-700;
+  }
+}
+
+/* Clickable items get a subtle cursor even without explicit cursor-pointer */
+a, button, [role="link"] {
+  cursor: pointer;
+}
