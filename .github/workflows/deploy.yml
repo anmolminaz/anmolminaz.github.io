@@ -27,11 +27,23 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
+      - name: Create .env.local
+        run: |
+          echo "NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}" > .env.local
+          echo "NOTION_RESEARCH_DB_ID=${{ secrets.NOTION_RESEARCH_DB_ID }}" >> .env.local
+          echo "NOTION_BLOG_DB_ID=${{ secrets.NOTION_BLOG_DB_ID }}" >> .env.local
+          echo "NOTION_ANALYSIS_DB_ID=${{ secrets.NOTION_ANALYSIS_DB_ID }}" >> .env.local
+          echo "NOTION_PUBLICATIONS_DB_ID=${{ secrets.NOTION_PUBLICATIONS_DB_ID }}" >> .env.local
+          echo "NOTION_PROFILE_DB_ID=${{ secrets.NOTION_PROFILE_DB_ID }}" >> .env.local
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
+
+      - name: Check build output
+        run: ls -la out/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
