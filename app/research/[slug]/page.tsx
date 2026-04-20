@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getItemBySlug, getPublicationsByIds } from '@/lib/notion';
+import { getItemBySlug, getPublicationsByIds, getResearchItems } from '@/lib/notion';
 import NotionRenderer from '@/components/NotionRenderer';
 import ExternalLink from '@/components/ExternalLink';
 
@@ -8,11 +8,21 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 3600;
+const EMPTY_SLUG_PLACEHOLDER = '__empty__';
+
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const items = await getResearchItems();
+  const params = items.filter((item) => item.slug).map((item) => ({ slug: item.slug }));
+
+  return params.length > 0 ? params : [{ slug: EMPTY_SLUG_PLACEHOLDER }];
+}
 
 export default async function ResearchDetail({ params }: PageProps) {
   const { slug } = await params;
+  if (slug === EMPTY_SLUG_PLACEHOLDER) notFound();
+
   const item = await getItemBySlug(process.env.NOTION_RESEARCH_DB_ID!, slug);
 
   if (!item) notFound();

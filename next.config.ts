@@ -1,16 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  trailingSlash: true,
+  output: "export",
+  pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
     unoptimized: true,
+  },
+  experimental: {
+    mdxRs: false,
   },
 };
 

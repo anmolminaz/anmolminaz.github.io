@@ -1,17 +1,29 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getItemBySlug } from '@/lib/notion';
+import { getItemBySlug, getBlogPosts } from '@/lib/notion';
 import NotionRenderer from '@/components/NotionRenderer';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 3600;
+const EMPTY_SLUG_PLACEHOLDER = '__empty__';
+
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const posts = await getBlogPosts();
+  const params = posts.filter((post) => post.slug).map((post) => ({
+    slug: post.slug,
+  }));
+
+  return params.length > 0 ? params : [{ slug: EMPTY_SLUG_PLACEHOLDER }];
+}
 
 export default async function BlogDetail({ params }: PageProps) {
   const { slug } = await params;
+  if (slug === EMPTY_SLUG_PLACEHOLDER) notFound();
+
   const post = await getItemBySlug(process.env.NOTION_BLOG_DB_ID!, slug);
 
   if (!post) notFound();
